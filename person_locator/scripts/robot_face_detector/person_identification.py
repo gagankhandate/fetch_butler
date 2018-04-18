@@ -19,7 +19,7 @@ class_mapping = {0: 'John_Ashcroft',
  10: 'Will_Pascucci',
  11: 'Gagan_Khandate'}
 
-restart_augmented_training_path = "models/cnn/inception_v3_faces_restart_augmented.ckpt"
+restart_augmented_training_path = "/home/parallels/workspace/src/fetch_butler/person_locator/scripts/robot_face_detector/models/cnn/inception_v3_faces_restart_augmented.ckpt"
 #restart_augmented_training_path = "models/cnn/inception_v3_faces_augmented.ckpt"
 
 # Function takes in an image array and returns the resized and normalized array

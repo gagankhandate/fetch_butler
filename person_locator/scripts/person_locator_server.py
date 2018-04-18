@@ -24,12 +24,12 @@ class PersonLocator():
 	def get_face(self):
 		""" returns the bounding box of the face for the name 
 		in the request"""
-		call("python3 robot_face_detector/main.py")
+		call("python3 ./robot_face_detector/main.py", shell=True)
 		
 
 	def save_img(self):
 		try:
-			print(self.rgb_img)
+			#print(self.rgb_img)
 			cv2_img = bridge.imgmsg_to_cv2(self.rgb_img, "bgr8")
 		except CvBridgeError, e:
 			print(e)
@@ -37,12 +37,12 @@ class PersonLocator():
 			cv2.imwrite('images/camera_img.jpg', cv2_img)
 
 	def update_rgb_img(self,img):
-		print("update image called")
+		#print("update image called")
 		self.rgb_img = img
 		self.image_found = True
 
 	def update_pointcloud(self,pc):
-		print("update pointcloud called")
+		#print("update pointcloud called")
 		self.pointcloud = pc
 	
 	def update_frames(self):
@@ -55,6 +55,7 @@ class PersonLocator():
 		#print('Finding location of '+ str(req.person_name)+ '...')
 		print('finding ' + req)
 		self.update_frames()
+		self.get_face()
 
 		# print(self.rgb_img)
 		# print(self.pointcloud)
@@ -63,7 +64,8 @@ class PersonLocator():
 			location_str = fn.readline().strip()
 		#print(location_str)
 
-		bouding_box = eval(location_str)
+		bounding_box = eval(location_str)
+		print(bounding_box)
 
 		print('Image Time Stamp:' + str(self.rgb_img.header.stamp))
 		print('PointCloud2 Time Stamp:' + str(self.pointcloud.header.stamp))
@@ -76,9 +78,9 @@ def main_run():
 	rospy.init_node('person_locator_server', anonymous=True)
 	rospy.loginfo('Starting person_locator service ... ')
 	person_locator_srv.update_frames()
-	#while(not person_locator_srv.image_found):
-	#	sleep(.5)
-	#person_locator_srv.save_img()
+	while(not person_locator_srv.image_found):
+		sleep(.5)
+	person_locator_srv.save_img()
 	
 	#rospy.Service('person_locator', GetPersonPosition, person_locator_srv.get_position)
 

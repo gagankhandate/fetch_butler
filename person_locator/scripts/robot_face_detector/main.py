@@ -7,8 +7,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 face_detector = dlib.get_frontal_face_detector()
-file_name = '../images/camera_img.jpg'
-LOCATION_FILENAME = '../location.txt'
+file_name = '/home/parallels/workspace/src/fetch_butler/person_locator/scripts/images/camera_img.jpg'
+LOCATION_FILENAME = '/home/parallels/workspace/src/fetch_butler/person_locator/scripts/location.txt'
 
 def get_photo():
 	faces_found = False
@@ -28,8 +28,8 @@ def run():
 		new_img = main_image.crop((face_rect.left(), face_rect.top(), face_rect.right(), face_rect.bottom()))
 		bounding_box = (face_rect.left(), face_rect.top(), face_rect.right(), face_rect.bottom())
 		new_img = new_img.resize((250, 250))
-		new_img.save("face_" + str(i) + ".jpg")
-		faces.append(("face_" + str(i) + ".jpg", new_img, np.array(new_img), bounding_box))
+		new_img.save("/home/parallels/workspace/src/fetch_butler/person_locator/scripts/robot_face_detector/face_" + str(i) + ".jpg")
+		faces.append(("/home/parallels/workspace/src/fetch_butler/person_locator/scripts/robot_face_detector/face_" + str(i) + ".jpg", new_img, np.array(new_img), bounding_box))
 
 	result = []
 
