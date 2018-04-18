@@ -19,8 +19,8 @@ class_mapping = {0: 'John_Ashcroft',
  10: 'Will_Pascucci',
  11: 'Gagan_Khandate'}
 
-#restart_augmented_training_path = "models/cnn/inception_v3_faces_restart_augmented.ckpt"
-restart_augmented_training_path = "models/cnn/inception_v3_faces_augmented.ckpt"
+restart_augmented_training_path = "models/cnn/inception_v3_faces_restart_augmented.ckpt"
+#restart_augmented_training_path = "models/cnn/inception_v3_faces_augmented.ckpt"
 
 # Function takes in an image array and returns the resized and normalized array
 def prepare_image(image, target_height=299, target_width=299):
