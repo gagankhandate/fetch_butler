@@ -19,8 +19,8 @@ class_mapping = {0: 'John_Ashcroft',
  10: 'Will_Pascucci',
  11: 'Gagan_Khandate'}
 
-restart_augmented_training_path = "/home/parallels/workspace/src/fetch_butler/person_locator/scripts/robot_face_detector/models/cnn/inception_v3_faces_restart_augmented.ckpt"
-#restart_augmented_training_path = "models/cnn/inception_v3_faces_augmented.ckpt"
+# restart_augmented_training_path = "/home/gagan/humanoid_robot/butler_ws2/src/fetch_butler/person_locator/scripts/face_detector/models/cnn/inception_v3_faces_restart_augmented.ckpt"
+restart_augmented_training_path = os.getcwd()+"/models/cnn/inception_v3_faces_restart_augmented.ckpt"
 
 # Function takes in an image array and returns the resized and normalized array
 def prepare_image(image, target_height=299, target_width=299):

@@ -1,3 +1,10 @@
 person_locator/scripts/robot_face_detector/models
+person_locator/scripts/face_detector/models
+person_locator/scripts/face_detector/camera_img.jpg
+person_locator/scripts/face_detector/face_0.jpg
+person_locator/scripts/face_detector/face_1.jpg
+person_locator/scripts/face_detector/location.txt
+
+
 
 *.pyc

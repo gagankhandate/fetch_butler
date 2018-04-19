@@ -1,40 +1,71 @@
 #!/usr/bin/env python
-
 import rospy
-from subprocess import call
 from geometry_msgs.msg import Pose2D
 from sensor_msgs.msg import Image, PointCloud2
-from cv_bridge import CvBridge, CvBridgeError
-import cv2
-from time import sleep
-
 from person_locator.srv import *
 
-bridge = CvBridge()
+from cv_bridge import CvBridge, CvBridgeError
+import cv2
 
-LOCATION_FILENAME = 'location.txt'
+import os
+from subprocess import call
+from rospkg import RosPack
+
+# Context Manager for handling directories for subprocess call
+class cd:
+    """Context manager for changing the current working directory"""
+    def __init__(self, newPath):
+        self.newPath = os.path.expanduser(newPath)
+
+    def __enter__(self):
+        self.savedPath = os.getcwd()
+        os.chdir(self.newPath)
+
+    def __exit__(self, etype, value, traceback):
+        os.chdir(self.savedPath)
+
+
+# Some initial stuff
+rospack = RosPack()
+face_detect_dir = rospack.get_path('person_locator') +'/scripts/face_detector/'
+
+bridge = CvBridge()
 
 class PersonLocator():
 	def __init__(self):
 		self.rgb_img = Image()
-		self.pointcloud = PointCloud2()
-		self.image_needed = True
-		self.image_found = False
+		self.update_frames()
 
 	def get_face(self):
 		""" returns the bounding box of the face for the name 
 		in the request"""
-		call("python3 ./robot_face_detector/main.py", shell=True)
-		
+
+		self.update_frames()
+		# print('Image Time Stamp:' + str(self.rgb_img.header.stamp))
+		# print('PointCloud2 Time Stamp:' + str(self.pointcloud.header.stamp))
+
+		self.save_img()
+
+		# open pkg directory, run face detection and find bounding box
+		with cd(face_detect_dir):
+			call("python3 main.py", shell=True)	
+			# read the bounding box from the file below
+			with open('/runtime/location.txt', 'r') as fn:
+				location_str = fn.readline().strip()
+
+		bounding_box = eval(location_str)
+		return bounding_box
 
 	def save_img(self):
+		
 		try:
 			#print(self.rgb_img)
 			cv2_img = bridge.imgmsg_to_cv2(self.rgb_img, "bgr8")
 		except CvBridgeError, e:
 			print(e)
 		else:
-			cv2.imwrite('images/camera_img.jpg', cv2_img)
+			with cd(face_detect_dir):
+				cv2.imwrite('/runtime/camera_img.jpg', cv2_img)
 
 	def update_rgb_img(self,img):
 		#print("update image called")
@@ -52,43 +83,47 @@ class PersonLocator():
 		rospy.Subscriber("head_camera/depth_registered/points", PointCloud2, self.update_pointcloud)
 
 	def get_position(self, req):
-		#print('Finding location of '+ str(req.person_name)+ '...')
-		print('finding ' + req)
-		self.update_frames()
-		self.get_face()
+		print('Finding location of '+ str(req.person_name)+ '...')
+		
+		# print('finding ' + req)
+		bounding_box = self.get_face()
 
-		# print(self.rgb_img)
-		# print(self.pointcloud)
+		# TODO: Use bounding box to find the xy position of the person in map frame
+		# Do this with image_geometry package
+		position = GetPersonPositionResponse()
 
-		with open(LOCATION_FILENAME, 'r') as fn:
-			location_str = fn.readline().strip()
-		#print(location_str)
-
-		bounding_box = eval(location_str)
-		print(bounding_box)
-
-		print('Image Time Stamp:' + str(self.rgb_img.header.stamp))
-		print('PointCloud2 Time Stamp:' + str(self.pointcloud.header.stamp))
-
-		return GetPersonPositionResponse()
+		return position
 
 
-def main_run():
-	person_locator_srv = PersonLocator()
-	rospy.init_node('person_locator_server', anonymous=True)
-	rospy.loginfo('Starting person_locator service ... ')
-	person_locator_srv.update_frames()
-	while(not person_locator_srv.image_found):
-		sleep(.5)
-	person_locator_srv.save_img()
+# def main_run():
+# 	person_locator_srv = PersonLocator()
+# 	rospy.init_node('person_locator_server', anonymous=True)
+# 	rospy.loginfo('Starting person_locator service ... ')
+# 	person_locator_srv.update_frames()
+# 	while(not person_locator_srv.image_found):
+# 		sleep(.5)
+# 	person_locator_srv.save_img()
 	
-	#rospy.Service('person_locator', GetPersonPosition, person_locator_srv.get_position)
+# 	#rospy.Service('person_locator', GetPersonPosition, person_locator_srv.get_position)
 
-	location = person_locator_srv.get_position('name')
-	print(location)
+# 	location = person_locator_srv.get_position('name')
+# 	print(location)
 
-	rospy.spin()
+# 	rospy.spin()
 
 
 if __name__ == '__main__':
-	main_run()
+	# main_run()
+	
+	person_locator_srv = PersonLocator()
+	
+	rospy.init_node('person_locator_server', anonymous=True)
+	rospy.loginfo('Starting person_locator service ... ')
+	
+	# Start service 
+	rospy.Service('person_locator', GetPersonPosition, person_locator_srv.get_position)
+
+	# location = person_locator_srv.get_position('name')
+
+	# Keep node from exiting
+	rospy.spin()
