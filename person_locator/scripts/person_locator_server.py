@@ -50,7 +50,7 @@ class PersonLocator():
 		with cd(face_detect_dir):
 			call("python3 main.py", shell=True)	
 			# read the bounding box from the file below
-			with open('/runtime/location.txt', 'r') as fn:
+			with open('location.txt', 'r') as fn:
 				location_str = fn.readline().strip()
 
 		bounding_box = eval(location_str)
@@ -65,7 +65,7 @@ class PersonLocator():
 			print(e)
 		else:
 			with cd(face_detect_dir):
-				cv2.imwrite('/runtime/camera_img.jpg', cv2_img)
+				cv2.imwrite('camera_img.jpg', cv2_img)
 
 	def update_rgb_img(self,img):
 		#print("update image called")
