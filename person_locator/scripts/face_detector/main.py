@@ -7,17 +7,19 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 face_detector = dlib.get_frontal_face_detector()
-file_name = '/runtime/camera_img.jpg'
-LOCATION_FILENAME = 'runtime/location.txt'
+file_name = 'camera_img.jpg'
+LOCATION_FILENAME = 'location.txt'
 
 def get_photo():
 	faces_found = False
-	while(not faces_found):
+	image = io.imread(file_name)
+	i = 0
+	while(not faces_found and i < 5):
 		#file_name = 'test_imgs/Gagan_Khandate_330.jpg'
-		image = io.imread(file_name)
 		detected_faces = face_detector(image, 1)
 		faces_found = len(detected_faces) >= 1
-
+		i+=1
+	print('NO faces found')
 	return detected_faces, image
 
 def run():

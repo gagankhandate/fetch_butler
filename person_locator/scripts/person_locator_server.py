@@ -57,7 +57,6 @@ class PersonLocator():
 		return bounding_box
 
 	def save_img(self):
-		
 		try:
 			#print(self.rgb_img)
 			cv2_img = bridge.imgmsg_to_cv2(self.rgb_img, "bgr8")
@@ -70,7 +69,6 @@ class PersonLocator():
 	def update_rgb_img(self,img):
 		#print("update image called")
 		self.rgb_img = img
-		self.image_found = True
 
 	def update_pointcloud(self,pc):
 		#print("update pointcloud called")
@@ -90,6 +88,7 @@ class PersonLocator():
 
 		# TODO: Use bounding box to find the xy position of the person in map frame
 		# Do this with image_geometry package
+
 		position = GetPersonPositionResponse()
 
 		return position
