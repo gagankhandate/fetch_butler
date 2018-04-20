@@ -64,7 +64,7 @@ with tf.name_scope("init_and_saver"):
 
 print('done loading model params')
 
-class person_classifier(object):
+class Person_Classifier(object):
     # Function takes in an image array and returns the resized and normalized array
     def prepare_image(self, image, target_height=299, target_width=299):
         image = imresize(image, (target_width, target_height))
