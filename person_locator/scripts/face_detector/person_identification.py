@@ -21,12 +21,7 @@ class_mapping = {0: 'John_Ashcroft',
 
 # restart_augmented_training_path = "/home/gagan/humanoid_robot/butler_ws2/src/fetch_butler/person_locator/scripts/face_detector/models/cnn/inception_v3_faces_restart_augmented.ckpt"
 restart_augmented_training_path = os.getcwd()+"/models/cnn/inception_v3_faces_restart_augmented.ckpt"
-
-# Function takes in an image array and returns the resized and normalized array
-def prepare_image(image, target_height=299, target_width=299):
-    image = imresize(image, (target_width, target_height))
-    return image.astype(np.float32) / 255
-
+print('loading model params')
 tf.reset_default_graph()
 X = tf.placeholder(tf.float32, [None, 299, 299, 3], name='X')
 
@@ -67,31 +62,39 @@ with tf.name_scope("init_and_saver"):
     init = tf.global_variables_initializer()
     saver = tf.train.Saver()
 
-def classify_image(image_array):
-    #image_array = images[index]
-    #label = class_mapping[labels[index]]
+print('done loading model params')
 
-    prepared_image = prepare_image(image_array)
-    prepared_image = np.reshape(prepared_image, newshape=(-1, 299, 299, 3))
+class person_classifier(object):
+    # Function takes in an image array and returns the resized and normalized array
+    def prepare_image(self, image, target_height=299, target_width=299):
+        image = imresize(image, (target_width, target_height))
+        return image.astype(np.float32) / 255
 
-    with tf.Session() as sess:
-        saver.restore(sess, restart_augmented_training_path)
-        predictions = sess.run(probability, {X: prepared_image})
+    def classify_image(self, image_array):
+        #image_array = images[index]
+        #label = class_mapping[labels[index]]
 
-    predictions = [(i, prediction) for i, prediction in enumerate(predictions[0])]
-    predictions = sorted(predictions, key=lambda x: x[1], reverse=True)
-    print(predictions)
-    #print('\nCorrect Answer: {}'.format(label))
-    '''
-    print('\nPredictions:')
-    for prediction in predictions:
-        class_label = prediction[0]
-        probability_value = prediction[1]
-        #print(class_label)
-        #print(class_mapping[class_label])
-        #label = class_mapping[class_label]
-        #print("{:26}: {:.2f}%".format(label, probability_value * 100))
-    '''
+        prepared_image = self.prepare_image(image_array)
+        prepared_image = np.reshape(prepared_image, newshape=(-1, 299, 299, 3))
 
-    best_prediction = predictions[0][0]
-    return class_mapping[best_prediction]
+        with tf.Session() as sess:
+            saver.restore(sess, restart_augmented_training_path)
+            predictions = sess.run(probability, {X: prepared_image})
+
+        predictions = [(i, prediction) for i, prediction in enumerate(predictions[0])]
+        predictions = sorted(predictions, key=lambda x: x[1], reverse=True)
+        print(predictions)
+        #print('\nCorrect Answer: {}'.format(label))
+        '''
+        print('\nPredictions:')
+        for prediction in predictions:
+            class_label = prediction[0]
+            probability_value = prediction[1]
+            #print(class_label)
+            #print(class_mapping[class_label])
+            #label = class_mapping[class_label]
+            #print("{:26}: {:.2f}%".format(label, probability_value * 100))
+        '''
+
+        best_prediction = predictions[0][0]
+        return class_mapping[best_prediction]
