@@ -5,6 +5,7 @@ from PIL import Image
 from person_identification import Person_Classifier
 import numpy as np
 import matplotlib.pyplot as plt
+import os
 
 dlib_face_detector = dlib.get_frontal_face_detector()
 file_name = 'camera_img.jpg'
@@ -28,6 +29,7 @@ class face_detector(object):
     	return detected_faces, image
 
     def run(self):
+        print(os.getcwd())
     	main_image = Image.open(file_name)
     	detected_faces, image = self.get_photo()
     	faces = []

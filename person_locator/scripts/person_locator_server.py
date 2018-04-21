@@ -3,7 +3,6 @@ import rospy
 from geometry_msgs.msg import Pose2D
 from sensor_msgs.msg import Image, PointCloud2
 import tf
-
 from person_locator.srv import *
 
 from cv_bridge import CvBridge, CvBridgeError
@@ -15,6 +14,9 @@ from rospkg import RosPack
 
 import struct
 import numpy as np
+
+from fetch_face_detector import face_detector
+
 
 # Context Manager for handling directories for subprocess call
 class cd:
@@ -31,7 +33,7 @@ class cd:
 
 # Some initial stuff
 rospack = RosPack()
-face_detect_dir = rospack.get_path('person_locator') +'/scripts/face_detector/'
+face_detect_dir = rospack.get_path('person_locator') +'/scripts/'
 
 bridge = CvBridge()
 
@@ -41,6 +43,7 @@ class PersonLocator():
 		self.headcam_pc = []
 		self.update_frames()
 		self.tf_listener = tf.TransformListener()
+		self.my_face_detector = face_detector()
 
 	def update_rgb(self,img):
 		#print("update image called")
@@ -62,7 +65,8 @@ class PersonLocator():
 
 		self.update_frames()
 		
-		# self.save_img()
+		self.save_img()
+
 
 		# open pkg directory, run face detection and find bounding box
 		# with cd(face_detect_dir):
@@ -70,21 +74,22 @@ class PersonLocator():
 		# 	# read the bounding box from the file below
 		# 	with open('location.txt', 'r') as fn:
 		# 		location_str = fn.readline().strip()
-
 		# bounding_box = eval(location_str)
-		bounding_box = []
+		
+		with cd(face_detect_dir):
+			bounding_box = self.my_face_detector.run()
 
 		return bounding_box
 
 	def save_img(self):
 		try:
 			#print(self.rgb_img)
-			cv2_img = bridge.imgmsg_to_cv2(self.rgb_img, "bgr8")
+			cv2_img = bridge.imgmsg_to_cv2(self.headcam_rgb, "bgr8")
 		except CvBridgeError, e:
 			print(e)
 		else:
 			with cd(face_detect_dir):
-				cv2.imwrite('camera_img.jpg', cv2_img)
+				cv2.imwrite('camera_img_2.jpg', cv2_img)
 
 
 	def fromPixelTo3D(self,uv):
