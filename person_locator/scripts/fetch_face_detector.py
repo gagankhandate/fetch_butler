@@ -23,7 +23,7 @@ class face_detector(object):
     		detected_faces = dlib_face_detector(image, 1)
     		faces_found = len(detected_faces) >= 1
     		i+=1
-    	#print('NO faces found')
+    		
 	print(str(i) + ' faces found')
     	return detected_faces, image
 

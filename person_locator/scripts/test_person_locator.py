@@ -16,7 +16,7 @@ def get_person_position(name):
 if __name__ == '__main__':
 	rospy.init_node('test_person_locator', anonymous=True)
 	
-	rate = rospy.Rate(0.2)
+	rate = rospy.Rate(1)
 	while True:	
 		result = get_person_position('Thanos')
 		print(result)

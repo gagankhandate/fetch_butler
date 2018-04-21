@@ -2,6 +2,8 @@
 import rospy
 from geometry_msgs.msg import Pose2D
 from sensor_msgs.msg import Image, PointCloud2
+import tf
+
 from person_locator.srv import *
 
 from cv_bridge import CvBridge, CvBridgeError
@@ -10,6 +12,9 @@ import cv2
 import os
 from subprocess import call
 from rospkg import RosPack
+
+import struct
+import numpy as np
 
 # Context Manager for handling directories for subprocess call
 class cd:
@@ -24,7 +29,6 @@ class cd:
     def __exit__(self, etype, value, traceback):
         os.chdir(self.savedPath)
 
-
 # Some initial stuff
 rospack = RosPack()
 face_detect_dir = rospack.get_path('person_locator') +'/scripts/face_detector/'
@@ -33,27 +37,43 @@ bridge = CvBridge()
 
 class PersonLocator():
 	def __init__(self):
-		self.rgb_img = Image()
+		self.headcam_rgb = []
+		self.headcam_pc = []
 		self.update_frames()
+		self.tf_listener = tf.TransformListener()
+
+	def update_rgb(self,img):
+		#print("update image called")
+		self.headcam_rgb = img
+
+	def update_pc(self,pc):
+		#print("update pointcloud called")
+		self.headcam_pc = pc
+
+	def update_frames(self):
+		""" capture the color image for face recognition and 
+		point cloud for determining location"""
+		rospy.Subscriber("head_camera/rgb/image_raw", Image, self.update_rgb)
+		rospy.Subscriber("head_camera/depth_registered/points", PointCloud2, self.update_pc) 
 
 	def get_face(self):
 		""" returns the bounding box of the face for the name 
 		in the request"""
 
 		self.update_frames()
-		# print('Image Time Stamp:' + str(self.rgb_img.header.stamp))
-		# print('PointCloud2 Time Stamp:' + str(self.pointcloud.header.stamp))
-
-		self.save_img()
+		
+		# self.save_img()
 
 		# open pkg directory, run face detection and find bounding box
-		with cd(face_detect_dir):
-			call("python3 main.py", shell=True)	
-			# read the bounding box from the file below
-			with open('location.txt', 'r') as fn:
-				location_str = fn.readline().strip()
+		# with cd(face_detect_dir):
+		# 	call("python3 main.py", shell=True)	
+		# 	# read the bounding box from the file below
+		# 	with open('location.txt', 'r') as fn:
+		# 		location_str = fn.readline().strip()
 
-		bounding_box = eval(location_str)
+		# bounding_box = eval(location_str)
+		bounding_box = []
+
 		return bounding_box
 
 	def save_img(self):
@@ -66,19 +86,33 @@ class PersonLocator():
 			with cd(face_detect_dir):
 				cv2.imwrite('camera_img.jpg', cv2_img)
 
-	def update_rgb_img(self,img):
-		#print("update image called")
-		self.rgb_img = img
 
-	def update_pointcloud(self,pc):
-		#print("update pointcloud called")
-		self.pointcloud = pc
-	
-	def update_frames(self):
-		""" capture the color image for face recognition and 
-		point cloud for determining location"""
-		rospy.Subscriber("head_camera/rgb/image_raw", Image, self.update_rgb_img)
-		rospy.Subscriber("head_camera/depth_registered/points", PointCloud2, self.update_pointcloud)
+	def fromPixelTo3D(self,uv):
+		# print(self.headcam_pc.fields)
+		# print(self.headcam_pc.data)
+		i = uv[1]*self.headcam_pc.row_step + uv[0]*self.headcam_pc.point_step
+		print(i)
+		for field in self.headcam_pc.fields:
+			if field.name == 'x':
+				ix = i + field.offset
+			if field.name == 'y':
+				iy = i + field.offset
+			if field.name == 'z':
+				iz = i + field.offset
+		
+		bytes_x = [ord(x) for x in self.headcam_pc.data[ix:ix+4]]
+		bytes_y = [ord(x) for x in self.headcam_pc.data[iy:iy+4]]
+		bytes_z = [ord(x) for x in self.headcam_pc.data[iz:iz+4]]
+		temp = struct.pack('4B',*bytes_x)
+		px = struct.unpack('f', temp)[0]
+		temp = struct.pack('4B',*bytes_y)
+		py = struct.unpack('f', temp)[0]
+		temp = struct.pack('4B',*bytes_z)
+		pz = struct.unpack('f', temp)[0]
+
+		p = [px,py,pz]
+		
+		return p
 
 	def get_position(self, req):
 		print('Finding location of '+ str(req.person_name)+ '...')
@@ -86,29 +120,33 @@ class PersonLocator():
 		# print('finding ' + req)
 		bounding_box = self.get_face()
 
-		# TODO: Use bounding box to find the xy position of the person in map frame
-		# Do this with image_geometry package
+		# To do do get face center from bounding box 
+		face_center = (240,380)
+
+		p = self.fromPixelTo3D(face_center)
+
+		print(p)
+
+		time =  self.tf_listener.getLatestCommonTime('/map','/head_camera_depth_optical_frame')
+		(trans,rot) = self.tf_listener.lookupTransform('/map','/head_camera_depth_optical_frame',time)
+
+		Ttrans = tf.transformations.translation_matrix(trans)
+		Trot = tf.transformations.quaternion_matrix(rot)
+		Tp = tf.transformations.translation_matrix(p)
+
+		Tp_map = tf.transformations.concatenate_matrices(Ttrans,Trot,Tp)
+		p_map = Tp_map[0:3,3]
+
+		print('transform')
+
+		print(p_map)
 
 		position = GetPersonPositionResponse()
+		position.x = p_map[0]
+		position.y = p_map[1]
 
 		return position
 
-
-# def main_run():
-# 	person_locator_srv = PersonLocator()
-# 	rospy.init_node('person_locator_server', anonymous=True)
-# 	rospy.loginfo('Starting person_locator service ... ')
-# 	person_locator_srv.update_frames()
-# 	while(not person_locator_srv.image_found):
-# 		sleep(.5)
-# 	person_locator_srv.save_img()
-	
-# 	#rospy.Service('person_locator', GetPersonPosition, person_locator_srv.get_position)
-
-# 	location = person_locator_srv.get_position('name')
-# 	print(location)
-
-# 	rospy.spin()
 
 
 if __name__ == '__main__':
