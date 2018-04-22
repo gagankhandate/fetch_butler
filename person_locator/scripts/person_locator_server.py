@@ -64,31 +64,35 @@ class PersonLocator():
 		""" returns the bounding box of the face for the name 
 		in the request"""
 		print('updating frames')
-		self.update_frames()
-		print('saving image')
-		#self.save_img()
+		face_found = False
+		while not face_found:
+			self.update_frames()
+			print('saving image')
+			#self.save_img()
 
-		print('getting face')
-		# open pkg directory, run face detection and find bounding box
-		# with cd(face_detect_dir):
-		# 	call("python3 main.py", shell=True)	
-		# 	# read the bounding box from the file below
-		# 	with open('location.txt', 'r') as fn:
-		# 		location_str = fn.readline().strip()
-		# bounding_box = eval(location_str)
-		print('cding to face_detect_dir')		
-		with cd(face_detect_dir):
-			print('getting bounding box')
-			bounding_boxes = self.my_face_detector.run()
-			print('got it')
-		bounding_box = ()
-		best_acc = 0.0
-                for box in bounding_boxes:
-			print(box)
-			if(box[0] == person_name and box[1] > best_acc):
-				best_acc = box[1]
-				print('person found!')
-				bounding_box = box[2]
+			print('getting face')
+			# open pkg directory, run face detection and find bounding box
+			# with cd(face_detect_dir):
+			# 	call("python3 main.py", shell=True)	
+			# 	# read the bounding box from the file below
+			# 	with open('location.txt', 'r') as fn:
+			# 		location_str = fn.readline().strip()
+			# bounding_box = eval(location_str)
+			print('cding to face_detect_dir')		
+			with cd(face_detect_dir):
+				print('getting bounding box')
+				bounding_boxes = self.my_face_detector.run()
+				print('got it')
+			if(len(bounding_boxes) > 0):
+				face_found = True
+			bounding_box = ()
+			best_acc = 0.0
+	                for box in bounding_boxes:
+				print(box)
+				if(box[0] == person_name and box[1] > best_acc):
+					best_acc = box[1]
+					print('person found!')
+					bounding_box = box[2]
 				
 
 		return bounding_box
