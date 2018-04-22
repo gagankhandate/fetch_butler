@@ -39,15 +39,14 @@ if __name__ == '__main__':
 
 		result = get_person_position('Thanos')
 
-		d = np.linalg.norm(np.array([result.x - curr_pos[0],result.y - curr_pos[1]]))
+		d = np.linalg.norm(np.array([result.position.x - curr_pos[0],result.position.y - curr_pos[1]]))
 		d0 = 0.5
 		if d < d0:
 			print("person too close")
 		else:
 			goal_pos_x = ((d-d0)/d)*(result.x - curr_pos[0]) + curr_pos[0]
 			goal_pos_y = ((d-d0)/d)*(result.y - curr_pos[1]) + curr_pos[1]
-			goal_pos_theta = np.arctan2(goal_pos_y - curr_pos[1],goal_pos_x - curr_pos[0]
-
+			goal_pos_theta = np.arctan2(goal_pos_y - curr_pos[1],goal_pos_x - curr_pos[0])
 			print("moving to new goal")
 			print(goal_pos)
 			# move_base.goto(goal_pos[0],goal_pos[1],goal_pos[2])

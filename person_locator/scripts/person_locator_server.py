@@ -129,7 +129,8 @@ class PersonLocator():
 		bounding_box = self.get_face()
 
 		# To do do get face center from bounding box 
-		face_center = (240,380)
+		# face_center = (240,380)
+		face_center = (0.5*(bounding_box[0]+bounding_box[2]),0.5*(bounding_box[1]+bounding_box[3]))
 
 		p = self.fromPixelTo3D(face_center)
 
@@ -149,11 +150,11 @@ class PersonLocator():
 
 		print(p_map)
 
-		position = GetPersonPositionResponse()
-		position.x = p_map[0]
-		position.y = p_map[1]
+		pos_msg = GetPersonPositionResponse()
+		pos_msg.position.x = p_map[0]
+		pos_msg.position.y = p_map[1]
 
-		return position
+		return pos_msg
 
 
 

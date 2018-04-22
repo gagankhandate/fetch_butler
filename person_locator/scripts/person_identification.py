@@ -30,7 +30,7 @@ class Person_Classifier(object):
          11: 'Gagan_Khandate'}
 
         # restart_augmented_training_path = "/home/gagan/humanoid_robot/butler_ws2/src/fetch_butler/person_locator/scripts/face_detector/models/cnn/inception_v3_faces_restart_augmented.ckpt"
-        self.restart_augmented_training_path = os.getcwd()+"/models/cnn/inception_v3_faces_restart_augmented.ckpt"
+        self.restart_augmented_training_path = os.getcwd()+"/src/fetch_butler/person_locator/scripts/models/cnn/inception_v3_faces_restart_augmented.ckpt"
         print('loading model params')
         self.tf.reset_default_graph()
         self.X = self.tf.placeholder(tf.float32, [None, 299, 299, 3], name='X')
