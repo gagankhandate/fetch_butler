@@ -1,3 +1,4 @@
+print('start of person identification file')
 import tensorflow as tf
 import numpy as np
 import os
