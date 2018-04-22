@@ -50,8 +50,8 @@ class face_detector(object):
     	for face in faces:
     		img = plt.imread(face[0])
     		#print(self.classifier.classify_image(img))
-                class_res = self.classifier.classify_image(img)
-    		result.append((class_res, face[3]))
+                class_res, acc_val = self.classifier.classify_image(img)
+    		result.append((class_res, acc_val, face[3]))
 
     	with open(LOCATION_FILENAME, 'w') as out_f:
     		out_f.write(str(result[0][1]))

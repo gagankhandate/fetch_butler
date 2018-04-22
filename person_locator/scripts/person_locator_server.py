@@ -82,11 +82,13 @@ class PersonLocator():
 			bounding_boxes = self.my_face_detector.run()
 			print('got it')
 		bounding_box = ()
+		best_acc = 0.0
                 for box in bounding_boxes:
 			print(box)
-			if(box[0] == person_name):
+			if(box[0] == person_name and box[1] > best_acc):
+				best_acc = box[1]
 				print('person found!')
-				bounding_box = box[1]
+				bounding_box = box[2]
 				
 
 		return bounding_box

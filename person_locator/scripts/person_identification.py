@@ -120,4 +120,4 @@ class Person_Classifier(object):
         '''
 
         best_prediction = predictions[0][0]
-        return self.class_mapping[best_prediction]
+        return self.class_mapping[best_prediction], predictions[0][1]
