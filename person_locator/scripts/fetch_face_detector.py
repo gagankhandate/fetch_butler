@@ -11,6 +11,8 @@ import os
 print('loading dlib')
 dlib_face_detector = dlib.get_frontal_face_detector()
 file_name = 'camera_img.jpg'
+#print(os.getcwd())
+#file_name = os.getcwd() + '/src/fetch_butler/person_locator/scripts/camera_img.jpg'
 LOCATION_FILENAME = 'location.txt'
 
 class face_detector(object):
@@ -47,13 +49,14 @@ class face_detector(object):
 
     	for face in faces:
     		img = plt.imread(face[0])
-    		print(self.classifier.classify_image(img))
-    		result.append((self.classifier.classify_image(img), face[3]))
+    		#print(self.classifier.classify_image(img))
+                class_res = self.classifier.classify_image(img)
+    		result.append((class_res, face[3]))
 
     	with open(LOCATION_FILENAME, 'w') as out_f:
     		out_f.write(str(result[0][1]))
 
-    	return result[0][1]
+    	return result
 
 #if __name__ == '__main__':
 #	run()

@@ -60,7 +60,7 @@ class PersonLocator():
 		rospy.Subscriber("head_camera/rgb/image_raw", Image, self.update_rgb)
 		rospy.Subscriber("head_camera/depth_registered/points", PointCloud2, self.update_pc) 
 
-	def get_face(self):
+	def get_face(self, person_name):
 		""" returns the bounding box of the face for the name 
 		in the request"""
 		print('updating frames')
@@ -79,8 +79,15 @@ class PersonLocator():
 		print('cding to face_detect_dir')		
 		with cd(face_detect_dir):
 			print('getting bounding box')
-			bounding_box = self.my_face_detector.run()
+			bounding_boxes = self.my_face_detector.run()
 			print('got it')
+		bounding_box = ()
+                for box in bounding_boxes:
+			print(box)
+			if(box[0] == person_name):
+				print('person found!')
+				bounding_box = box[1]
+				
 
 		return bounding_box
 
@@ -126,7 +133,7 @@ class PersonLocator():
 		print('Finding location of '+ str(req.person_name)+ '...')
 		print('hello?')		
 		# print('finding ' + req)
-		bounding_box = self.get_face()
+		bounding_box = self.get_face(req.person_name)
 
 		# To do do get face center from bounding box 
 		# face_center = (240,380)
