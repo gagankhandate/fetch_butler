@@ -60,27 +60,40 @@ class PersonLocator():
 		rospy.Subscriber("head_camera/rgb/image_raw", Image, self.update_rgb)
 		rospy.Subscriber("head_camera/depth_registered/points", PointCloud2, self.update_pc) 
 
-	def get_face(self):
+	def get_face(self, person_name):
 		""" returns the bounding box of the face for the name 
 		in the request"""
 		print('updating frames')
-		self.update_frames()
-		print('saving image')
-		#self.save_img()
+		face_found = False
+		while not face_found:
+			self.update_frames()
+			print('saving image')
+			#self.save_img()
 
-		print('getting face')
-		# open pkg directory, run face detection and find bounding box
-		# with cd(face_detect_dir):
-		# 	call("python3 main.py", shell=True)	
-		# 	# read the bounding box from the file below
-		# 	with open('location.txt', 'r') as fn:
-		# 		location_str = fn.readline().strip()
-		# bounding_box = eval(location_str)
-		print('cding to face_detect_dir')		
-		with cd(face_detect_dir):
-			print('getting bounding box')
-			bounding_box = self.my_face_detector.run()
-			print('got it')
+			print('getting face')
+			# open pkg directory, run face detection and find bounding box
+			# with cd(face_detect_dir):
+			# 	call("python3 main.py", shell=True)	
+			# 	# read the bounding box from the file below
+			# 	with open('location.txt', 'r') as fn:
+			# 		location_str = fn.readline().strip()
+			# bounding_box = eval(location_str)
+			print('cding to face_detect_dir')		
+			with cd(face_detect_dir):
+				print('getting bounding box')
+				bounding_boxes = self.my_face_detector.run()
+				print('got it')
+			if(len(bounding_boxes) > 0):
+				face_found = True
+			bounding_box = ()
+			best_acc = 0.0
+	                for box in bounding_boxes:
+				print(box)
+				if(box[0] == person_name and box[1] > best_acc):
+					best_acc = box[1]
+					print('person found!')
+					bounding_box = box[2]
+				
 
 		return bounding_box
 
@@ -126,7 +139,7 @@ class PersonLocator():
 		print('Finding location of '+ str(req.person_name)+ '...')
 		print('hello?')		
 		# print('finding ' + req)
-		bounding_box = self.get_face()
+		bounding_box = self.get_face(req.person_name)
 
 		# To do do get face center from bounding box 
 		# face_center = (240,380)
