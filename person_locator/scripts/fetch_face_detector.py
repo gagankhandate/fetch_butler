@@ -1,3 +1,4 @@
+print('start of face_detector file')
 import sys
 import dlib
 from skimage import io
@@ -7,12 +8,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
+print('loading dlib')
 dlib_face_detector = dlib.get_frontal_face_detector()
 file_name = 'camera_img.jpg'
 LOCATION_FILENAME = 'location.txt'
 
 class face_detector(object):
     def __init__(self):
+	print('instantiating person classifier')
         self.classifier = Person_Classifier()
 
     def get_photo(self):

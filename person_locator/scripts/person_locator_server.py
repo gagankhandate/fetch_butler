@@ -39,6 +39,7 @@ bridge = CvBridge()
 
 class PersonLocator():
 	def __init__(self):
+		print('init started')
 		self.headcam_rgb = []
 		self.headcam_pc = []
 		self.update_frames()
@@ -62,12 +63,12 @@ class PersonLocator():
 	def get_face(self):
 		""" returns the bounding box of the face for the name 
 		in the request"""
-
+		print('updating frames')
 		self.update_frames()
-		
-		self.save_img()
+		print('saving image')
+		#self.save_img()
 
-
+		print('getting face')
 		# open pkg directory, run face detection and find bounding box
 		# with cd(face_detect_dir):
 		# 	call("python3 main.py", shell=True)	
@@ -75,9 +76,11 @@ class PersonLocator():
 		# 	with open('location.txt', 'r') as fn:
 		# 		location_str = fn.readline().strip()
 		# bounding_box = eval(location_str)
-		
+		print('cding to face_detect_dir')		
 		with cd(face_detect_dir):
+			print('getting bounding box')
 			bounding_box = self.my_face_detector.run()
+			print('got it')
 
 		return bounding_box
 
@@ -121,7 +124,7 @@ class PersonLocator():
 
 	def get_position(self, req):
 		print('Finding location of '+ str(req.person_name)+ '...')
-		
+		print('hello?')		
 		# print('finding ' + req)
 		bounding_box = self.get_face()
 
