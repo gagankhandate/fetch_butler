@@ -18,8 +18,8 @@ if __name__ == '__main__':
 	
 	rate = rospy.Rate(1)
 	while True:
-                name = 'Will_Pascucci'
-                #name = 'Gagan_Khandate'
+                #name = 'Will_Pascucci'
+                name = 'Gagan_Khandate'
 		result = get_person_position(name)
 		print(result)
 		rate.sleep()

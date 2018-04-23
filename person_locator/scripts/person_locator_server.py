@@ -68,7 +68,7 @@ class PersonLocator():
 		while not face_found:
 			self.update_frames()
 			print('saving image')
-			#self.save_img()
+			self.save_img()
 
 			print('getting face')
 			# open pkg directory, run face detection and find bounding box
@@ -82,17 +82,22 @@ class PersonLocator():
 			with cd(face_detect_dir):
 				print('getting bounding box')
 				bounding_boxes = self.my_face_detector.run()
-				print('got it')
+				print('got it, printing bounding boxes')
+				print(bounding_boxes)
 			if(len(bounding_boxes) > 0):
 				face_found = True
 			bounding_box = ()
 			best_acc = 0.0
+			print('iterating through bboxes')
 	                for box in bounding_boxes:
 				print(box)
 				if(box[0] == person_name and box[1] > best_acc):
 					best_acc = box[1]
 					print('person found!')
 					bounding_box = box[2]
+					print(type(bounding_box))
+			if(len(bounding_box) == 0):
+				face_found = False
 				
 
 		return bounding_box
@@ -105,7 +110,7 @@ class PersonLocator():
 			print(e)
 		else:
 			with cd(face_detect_dir):
-				cv2.imwrite('camera_img_2.jpg', cv2_img)
+				cv2.imwrite('camera_img.jpg', cv2_img)
 
 
 	def fromPixelTo3D(self,uv):
@@ -140,10 +145,14 @@ class PersonLocator():
 		print('hello?')		
 		# print('finding ' + req)
 		bounding_box = self.get_face(req.person_name)
-
+		print('got a box')
+		print(bounding_box)
+		print(type(bounding_box[0]))
 		# To do do get face center from bounding box 
 		# face_center = (240,380)
-		face_center = (0.5*(bounding_box[0]+bounding_box[2]),0.5*(bounding_box[1]+bounding_box[3]))
+		face_center = (int(0.5*(int(bounding_box[0])+int(bounding_box[2]))),int(0.5*(int(bounding_box[1])+int(bounding_box[3]))))
+		print('face center')
+		print(face_center)
 
 		p = self.fromPixelTo3D(face_center)
 

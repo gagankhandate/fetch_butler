@@ -94,6 +94,7 @@ class Person_Classifier(object):
         return image.astype(np.float32) / 255
 
     def classify_image(self, image_array):
+	print('classify image called')
         #image_array = images[index]
         #label = class_mapping[labels[index]]
 
