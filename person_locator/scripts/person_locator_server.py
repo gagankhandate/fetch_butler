@@ -177,7 +177,7 @@ class PersonLocator():
 		pos_msg.position.y = p_map[1]
 
 		return pos_msg
-
+		
 
 
 if __name__ == '__main__':
