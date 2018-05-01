@@ -158,7 +158,7 @@
         <kinematic>0</kinematic>
         <gravity>1</gravity>
       </link>
-      <pose frame=''>1.34971 0.045026 0 0 -0 0</pose>
+      <pose frame=''>2.30955 -0.005457 0 0 -0 0</pose>
     </model>
     <model name='Pringles'>
       <link name='link_0'>
@@ -262,28 +262,142 @@
       </link>
       <static>0</static>
       <allow_auto_disable>1</allow_auto_disable>
-      <pose frame=''>1.39595 -0.349285 0 0 -0 0</pose>
+      <pose frame=''>2.3014 -0.439391 0 0 -0 0</pose>
+    </model>
+    <model name='Pringles_0'>
+      <link name='link_0'>
+        <pose frame=''>0 0 0 0 -0 0</pose>
+        <inertial>
+          <mass>1</mass>
+          <inertia>
+            <ixx>0.166667</ixx>
+            <ixy>0</ixy>
+            <ixz>0</ixz>
+            <iyy>0.166667</iyy>
+            <iyz>0</iyz>
+            <izz>0.166667</izz>
+          </inertia>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+        </inertial>
+        <gravity>1</gravity>
+        <self_collide>0</self_collide>
+        <kinematic>0</kinematic>
+        <visual name='visual'>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>/home/gagan/humanoid_robot/Misc/meshes/pringles_original.stl</uri>
+              <scale>1 1 1</scale>
+            </mesh>
+          </geometry>
+          <material>
+            <lighting>1</lighting>
+            <script>
+              <uri>file://media/materials/scripts/gazebo.material</uri>
+              <name>Gazebo/Grey</name>
+            </script>
+            <ambient>0.3 0.3 0.3 1</ambient>
+            <diffuse>0.7 0.7 0.7 1</diffuse>
+            <specular>0.01 0.01 0.01 1</specular>
+            <emissive>0 0 0 1</emissive>
+            <shader type='vertex'>
+              <normal_map>__default__</normal_map>
+            </shader>
+          </material>
+          <cast_shadows>1</cast_shadows>
+          <transparency>0</transparency>
+        </visual>
+        <collision name='collision'>
+          <laser_retro>0</laser_retro>
+          <max_contacts>10</max_contacts>
+          <pose frame=''>0 0 0 0 -0 0</pose>
+          <geometry>
+            <mesh>
+              <uri>/home/gagan/humanoid_robot/Misc/meshes/pringles_original.stl</uri>
+              <scale>1 1 1</scale>
+            </mesh>
+          </geometry>
+          <surface>
+            <friction>
+              <ode>
+                <mu>1</mu>
+                <mu2>1</mu2>
+                <fdir1>0 0 0</fdir1>
+                <slip1>0</slip1>
+                <slip2>0</slip2>
+              </ode>
+              <torsional>
+                <coefficient>1</coefficient>
+                <patch_radius>0</patch_radius>
+                <surface_radius>0</surface_radius>
+                <use_patch_radius>1</use_patch_radius>
+                <ode>
+                  <slip>0</slip>
+                </ode>
+              </torsional>
+            </friction>
+            <bounce>
+              <restitution_coefficient>0</restitution_coefficient>
+              <threshold>1e+06</threshold>
+            </bounce>
+            <contact>
+              <collide_without_contact>0</collide_without_contact>
+              <collide_without_contact_bitmask>1</collide_without_contact_bitmask>
+              <collide_bitmask>1</collide_bitmask>
+              <ode>
+                <soft_cfm>0</soft_cfm>
+                <soft_erp>0.2</soft_erp>
+                <kp>1e+13</kp>
+                <kd>1</kd>
+                <max_vel>0.01</max_vel>
+                <min_depth>0</min_depth>
+              </ode>
+              <bullet>
+                <split_impulse>1</split_impulse>
+                <split_impulse_penetration_threshold>-0.01</split_impulse_penetration_threshold>
+                <soft_cfm>0</soft_cfm>
+                <soft_erp>0.2</soft_erp>
+                <kp>1e+13</kp>
+                <kd>1</kd>
+              </bullet>
+            </contact>
+          </surface>
+        </collision>
+      </link>
+      <static>0</static>
+      <allow_auto_disable>1</allow_auto_disable>
+      <pose frame=''>2.35888 -0.357765 0 0 -0 0</pose>
     </model>
     <state world_name='default'>
-      <sim_time>166 136000000</sim_time>
-      <real_time>166 945252820</real_time>
-      <wall_time>1525026501 546607312</wall_time>
-      <iterations>166136</iterations>
+      <sim_time>140 870000000</sim_time>
+      <real_time>143 26318092</real_time>
+      <wall_time>1525122948 241428300</wall_time>
+      <iterations>140870</iterations>
       <model name='Pringles'>
-        <pose frame=''>1.15304 -0.019279 0.768661 6.4e-05 2e-05 -0.000308</pose>
+        <pose frame=''>2.19205 0.008056 0.768663 0.000137 -0.000141 -1.2e-05</pose>
         <scale>1 1 1</scale>
         <link name='link_0'>
-          <pose frame=''>1.15304 -0.019279 0.768661 6.4e-05 2e-05 -0.000308</pose>
+          <pose frame=''>2.19205 0.008056 0.768663 0.000137 -0.000141 -1.2e-05</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0.00182 -0.009585 -0.920166 -1.51363 -0.284748 2e-06</acceleration>
-          <wrench>0.00182 -0.009585 -0.920166 0 -0 0</wrench>
+          <acceleration>-0.043338 0.014744 16.3686 2.32535 0.547249 2e-06</acceleration>
+          <wrench>-0.043338 0.014744 16.3686 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='Pringles_0'>
+        <pose frame=''>2.35899 -0.358724 0.768677 0.000128 0.000535 -0.000558</pose>
+        <scale>1 1 1</scale>
+        <link name='link_0'>
+          <pose frame=''>2.35899 -0.358724 0.768677 0.000128 0.000535 -0.000558</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0.033311 -0.009048 17.8936 -1.44503 1.02287 1.9e-05</acceleration>
+          <wrench>0.033311 -0.009048 17.8936 0 -0 0</wrench>
         </link>
       </model>
       <model name='cafe_table'>
-        <pose frame=''>1.34971 -0.007807 0 0 -0 0</pose>
+        <pose frame=''>2.30955 -0.005457 0 0 -0 0</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose frame=''>1.34971 -0.007807 0 0 -0 0</pose>
+          <pose frame=''>2.30955 -0.005457 0 0 -0 0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
@@ -305,7 +419,7 @@
     </state>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose frame=''>5.29438 -7.16028 4.40692 -0 0.457799 1.80421</pose>
+        <pose frame=''>5.13628 -0.546895 1.26429 0 0.147643 2.5122</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>
