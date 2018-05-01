@@ -1,5 +1,5 @@
 string object_name 
 ---
-geometry_msgs/Pose position
+geometry_msgs/Pose g_pos 
 
 
