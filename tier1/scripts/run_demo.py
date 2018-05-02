@@ -66,10 +66,11 @@ if __name__ == '__main__':
 	# goal_pos = curr_pos + np.random.random(3)*0.3 + np.array([0.1,0.1,0])
 
 	result = get_person_position('Gagan_Khandate')
+	#result = get_person_position('Will_Pascucci')
 
 	if result is not None:
 		d = np.linalg.norm(np.array([result.position.x - curr_pos[0],result.position.y - curr_pos[1]]))
-		d0 = 1
+		d0 = 0.9
 		if d < d0:
 			print("person too close")
 		else:

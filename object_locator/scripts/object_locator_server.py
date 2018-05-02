@@ -59,7 +59,7 @@ class ObjectLocator(object):
 				min_obj_distance = center
 		
 		pos_msg = GetObjectPoseResponse()
-		pos_msg.g_pos.position = Point(center[0]-0.02,center[1]-0.22,center[2])
+		pos_msg.g_pos.position = Point(center[0]-0.02,center[1],center[2])
 		pos_msg.g_pos.orientation = Quaternion(0.0,0.0,0.0,1.0)
 		# return (center, (0.0,0.0,0.0,1.0))
 		return pos_msg

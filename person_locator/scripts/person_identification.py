@@ -16,18 +16,9 @@ class Person_Classifier(object):
         self.tf = tf
         self.slim = slim
         self.inception = inception
-        self.class_mapping = {0: 'John_Ashcroft',
-         1: 'Jean_Chretien',
-         2: 'Junichiro_Koizumi',
-         3: 'Hugo_Chavez',
-         4: 'Ariel_Sharon',
-         5: 'Gerhard_Schroeder',
-         6: 'Donald_Rumsfeld',
-         7: 'Tony_Blair',
-         8: 'Colin_Powell',
-         9: 'George_W_Bush',
-         10: 'Will_Pascucci',
-         11: 'Gagan_Khandate'}
+        self.class_mapping = {
+         0: 'Will_Pascucci',
+         1: 'Gagan_Khandate'}
 
         # restart_augmented_training_path = "/home/gagan/humanoid_robot/butler_ws2/src/fetch_butler/person_locator/scripts/face_detector/models/cnn/inception_v3_faces_restart_augmented.ckpt"
         self.restart_augmented_training_path = os.getcwd()+"/src/fetch_butler/person_locator/scripts/models/cnn/inception_v3_faces_restart_augmented.ckpt"
