@@ -5,6 +5,7 @@ from obj_recognition.msg import SegmentedClustersArray
 from object_locator.srv import *
 import sensor_msgs.point_cloud2
 import time
+from geometry_msgs.msg import Point, Quaternion
 
 class ObjectLocator(object):
 
@@ -57,10 +58,11 @@ class ObjectLocator(object):
 			if((abs(center[0]) + abs(center[1]) + abs(center[2])) < (abs(min_obj_distance[0]) + abs(min_obj_distance[1])+abs(min_obj_distance[2]))):
 				min_obj_distance = center
 		
-		#pos_msg = GetObjectPoseResponse()
-		#pos_msg.position = center
-		#pos_msg.orientation = (0.0,0.0,0.0,1.0)
-		return (center, (0.0,0.0,0.0,1.0))
+		pos_msg = GetObjectPoseResponse()
+		pos_msg.g_pos.position = Point(center[0]-0.02,center[1],center[2])
+		pos_msg.g_pos.orientation = Quaternion(0.0,0.0,0.0,1.0)
+		# return (center, (0.0,0.0,0.0,1.0))
+		return pos_msg
 
 if __name__ == '__main__':
 
@@ -69,7 +71,7 @@ if __name__ == '__main__':
 	rospy.loginfo('starting object locator service...')
 
 	rospy.Service('object_locator', GetObjectPose, object_locator_srv.get_pos) 
-	#rospy.sleep(5);
+	rospy.sleep(2);
 	#object_locator_srv.update_pc()
 	print(object_locator_srv.get_pos('pringles'))
 	rospy.spin()	
