@@ -265,25 +265,25 @@
       <pose frame=''>1.15091 -0.395555 0 0 -0 0</pose>
     </model>
     <state world_name='default'>
-      <sim_time>52 60000000</sim_time>
-      <real_time>52 162743939</real_time>
-      <wall_time>1525240729 307442374</wall_time>
-      <iterations>52060</iterations>
+      <sim_time>412 246000000</sim_time>
+      <real_time>850 461943338</real_time>
+      <wall_time>1525244706 812437269</wall_time>
+      <iterations>360186</iterations>
       <model name='Pringles'>
-        <pose frame=''>1.18811 -0.332011 0.772827 0 -0 0</pose>
+        <pose frame=''>1.00631 0.034151 0.768622 0.004039 -0.000622 -0.001724</pose>
         <scale>1 1 1</scale>
         <link name='link_0'>
-          <pose frame=''>1.18811 -0.332011 0.772827 0 -0 0</pose>
+          <pose frame=''>1.00631 0.034151 0.768622 0.004039 -0.000622 -0.001724</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
+          <acceleration>0 0 -9.8 0 -0 0</acceleration>
+          <wrench>0 0 -9.8 0 -0 0</wrench>
         </link>
       </model>
       <model name='cafe_table'>
-        <pose frame=''>1.50643 -0.010818 0 0 -0 0</pose>
+        <pose frame=''>1.32872 0.062045 0 0 -0 0</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose frame=''>1.50643 -0.010818 0 0 -0 0</pose>
+          <pose frame=''>1.32872 0.062045 0 0 -0 0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
@@ -305,7 +305,7 @@
     </state>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose frame=''>1.10494 -5.9477 1.67058 -1.9e-05 -1.9e-05 1.57293</pose>
+        <pose frame=''>2.75552 -0.373828 2.87845 0 0.719981 2.75691</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>

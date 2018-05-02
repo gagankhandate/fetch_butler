@@ -1,5 +1,5 @@
 <launch>
   <include file="$(find fetch_navigation)/launch/fetch_nav.launch" >
-    <arg name="map_file" value="$(find tier1)/maps/crlab2.yaml" />
+    <arg name="map_file" value="$(find tier1)/maps/crlab3.yaml" />
     </include>
 </launch>
